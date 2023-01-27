@@ -38,11 +38,11 @@ public class TemaController {
 		return ResponseEntity.ok(repository.findAllByDescricaoContainingIgnoreCase(nome));
 	}
 	@PostMapping
-	public ResponseEntity<Tema> post(@RequestBody Tema tema){
+	public ResponseEntity<Tema> post(@RequestBody @Valid Tema tema){
 		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(tema));
 	}
 	@PutMapping
-	public ResponseEntity<Tema> put(@RequestBody Tema tema){
+	public ResponseEntity<Tema> put(@RequestBody @Valid Tema tema){
 		return ResponseEntity.ok(repository.save(tema));
 	}
 	@DeleteMapping("/{id}")
