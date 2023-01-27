@@ -1,7 +1,7 @@
 package org.generation.blogwill.controller;
 
 import java.util.List;
-
+import javax.validation.Valid;
 import org.generation.blogwill.model.Tema;
 import org.generation.blogwill.repository.TemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
