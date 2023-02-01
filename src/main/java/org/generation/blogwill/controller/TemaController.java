@@ -1,7 +1,10 @@
 package org.generation.blogwill.controller;
 
 import java.util.List;
+import java.util.Optional;
+
 import javax.validation.Valid;
+
 import org.generation.blogwill.model.Tema;
 import org.generation.blogwill.repository.TemaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,39 +18,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/tema")
 public class TemaController {
 	@Autowired
-	private TemaRepository repository;
+	private TemaRepository temaRepository;
 	
 	@GetMapping
 	public ResponseEntity<List<Tema>> getAll(){
-		return ResponseEntity.ok(repository.findAll());
+		return ResponseEntity.ok(temaRepository.findAll());
 	}
 	@GetMapping("/{id}")
 	public ResponseEntity<Tema> getById(@PathVariable long id){
-		return repository.findById(id).map(resp -> ResponseEntity.ok(resp))
-				.orElse(ResponseEntity.notFound().build());
+		return temaRepository.findById(id)
+				.map(resp -> ResponseEntity.ok(resp))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-	@GetMapping("/nome/{nome}")
-	public ResponseEntity<List<Tema>> getbyName(@PathVariable String nome){
-		return ResponseEntity.ok(repository.findAllByDescricaoContainingIgnoreCase(nome));
+	@GetMapping("/descricao/{descricao}")
+	public ResponseEntity<List<Tema>> getbyDescricao(@PathVariable String descricao){
+		return ResponseEntity.ok(temaRepository
+				.findAllByDescricaoContainingIgnoreCase(descricao));
 	}
 	@PostMapping
 	public ResponseEntity<Tema> post(@RequestBody @Valid Tema tema){
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(tema));
+		return ResponseEntity.status(HttpStatus.CREATED)
+				.body(temaRepository.save(tema));
 	}
 	@PutMapping
 	public ResponseEntity<Tema> put(@RequestBody @Valid Tema tema){
-		return ResponseEntity.ok(repository.save(tema));
+		return temaRepository.findById(tema.getId())
+		.map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
+	            .body(temaRepository.save(tema)))
+	            .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
-	@DeleteMapping("/{id}")
-	public void delete(@PathVariable long id) {
-		repository.deleteById(id);
-		
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        Optional<Tema> tema = temaRepository.findById(id);
+        
+        if(tema.isEmpty())
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        
+       temaRepository.deleteById(id);
 	}
 }

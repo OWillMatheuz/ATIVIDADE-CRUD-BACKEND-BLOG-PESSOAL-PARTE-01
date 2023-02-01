@@ -19,10 +19,11 @@ public class Tema {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
+	
 	@NotNull
 	private String descricao;
 	
-	@OneToMany(mappedBy = "tema", cascade = CascadeType.ALL)//cascade all quando for deletar, uopdate e outros a um tema especifico todos seram deletados ou upados
+	@OneToMany(mappedBy = "tema", cascade = CascadeType.REMOVE)//cascade all quando for deletar, uopdate e outros a um tema especifico todos seram deletados ou upados
 	@JsonIgnoreProperties("tema")
 	private List<Postagens> postagens;
 
