@@ -3,7 +3,7 @@ package org.generation.blogwill.service;
 import java.nio.charset.Charset;
 import java.util.Optional;
 
-import org.apache.tomcat.util.codec.binary.Base64;
+import org.apache.commons.codec.binary.Base64;
 import org.generation.blogwill.model.UsuarioLogin;
 import org.generation.blogwill.model.UsuarioModel;
 import org.generation.blogwill.repository.UsuarioRepository;
@@ -60,7 +60,7 @@ public class UsuarioService {
 	                usuarioLogin.get().setId(usuario.get().getId());
 	                usuarioLogin.get().setNome(usuario.get().getNome());
 	                usuarioLogin.get().setFoto(usuario.get().getFoto());
-	                usuarioLogin.get().setToken(gerarBasicToken(usuarioLogin.get().getUsuario(),        usuarioLogin.get().getSenha()));
+	                usuarioLogin.get().setToken(gerarBasicToken(usuarioLogin.get().getUsuario(),usuarioLogin.get().getSenha()));
 	                usuarioLogin.get().setSenha(usuario.get().getSenha());
 
 	                return usuarioLogin;
@@ -92,7 +92,7 @@ public class UsuarioService {
 
 	        String token = usuario + ":" + senha;
 	        byte[] tokenBase64 = Base64.encodeBase64(token.getBytes(Charset.forName("US-ASCII")));
-	        return "Basic " + new String(tokenBase64);
+	        return "Basic" + new String(tokenBase64);
 
 	    }
 }
