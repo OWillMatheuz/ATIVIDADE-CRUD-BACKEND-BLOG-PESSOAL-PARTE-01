@@ -40,10 +40,6 @@ public class UsuarioModel {
 	@Size(max = 5000, message = "O link da foto não pode ser maior do que 5000 caracteres")
 	private String foto;
 	
-	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties("usuario")
-	private List<Postagens> postagens;
-
 	public UsuarioModel(Long id, String nome,String usuario, String senha,String foto) {
 		this.id = id;
 		this.nome = nome;
@@ -55,6 +51,9 @@ public class UsuarioModel {
 	public UsuarioModel() {
 	}
 	
+	@OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+	@JsonIgnoreProperties("usuario")
+	private List<Postagens> postagens;
 	
 
 	public Long getId() {
