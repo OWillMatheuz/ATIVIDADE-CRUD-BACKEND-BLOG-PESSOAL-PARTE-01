@@ -29,8 +29,6 @@ public class PostagensController {
 	@Autowired //serviço de injeção do spring
 	//nao podemos instanciar uma interface entao deixamos o spring fazer isto
 	private PostagemRepository repository;
-	@Autowired
-	private TemaRepository temaRepository;
 	//expor pra api que este metodo é Get.
 	//Sempre que vir requisição externa pela uri postagens for um metodo get vai dispara esse metodo
 	@GetMapping
@@ -49,25 +47,15 @@ public class PostagensController {
 	}
 	@PostMapping
 	public ResponseEntity<Postagens> post(@RequestBody Postagens postagem){
-		if (temaRepository.existsById(postagem.getTema().getId()))
 			return ResponseEntity.status(HttpStatus.CREATED)
 					.body(repository.save(postagem));
-			
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 	}
 	@PutMapping
 	public ResponseEntity<Postagens> put(@RequestBody Postagens postagem){
-if (repository.existsById(postagem.getId())){
-			
-			if (temaRepository.existsById(postagem.getTema().getId()))
-				return ResponseEntity.status(HttpStatus.OK)
-						.body(repository.save(postagem));
-			
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-			
-		}			
-			
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		return repository.findById(postagem.getId())
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK)
+						.body(repository.save(postagem)))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
