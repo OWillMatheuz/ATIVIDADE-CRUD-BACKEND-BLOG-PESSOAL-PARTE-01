@@ -13,6 +13,6 @@ import org.springframework.stereotype.Repository;
 //JpaRepository esta puxando os parametros da Classe model Postagens e qual é o tipo do ID Long
 public interface PostagemRepository extends JpaRepository<Postagens, Long> {
 	//buscar todos pelo titulo, que conter os caracter dentro,ele vai trazer, Igonre maiusculo ou minuscolo
-	public List<Postagens> findAllByTituloContainingIgnoreCase(@Param("titulo") String titulo);
+	public List<Postagens> findAllByTituloContainingIgnoreCase(String titulo);
 	//public List<Postagens> findAllByTextoContainingIgnoreCase (String texto);
 }
