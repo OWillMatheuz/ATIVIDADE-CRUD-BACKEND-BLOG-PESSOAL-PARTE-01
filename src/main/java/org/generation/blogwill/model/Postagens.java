@@ -16,17 +16,17 @@ import javax.validation.constraints.Size;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity // essa anotação vai ser uma classe do jpa
-@Table(name="postagens")//vai criar uma tabela postagens, anotação que é uma entidade
+@Table(name="tb_postagens")//vai criar uma tabela postagens, anotação que é uma entidade
 public class Postagens {
 	@Id //criar id no db
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//vai se transformar em uma primary key
 	private Long id;
 	
-	@NotNull // para que o usuario nao deixe o campo vazio
+	@NotBlank(message = "O atributo titulo é obrigatorio!")
 	@Size(min =5, max= 100)//anotação de quantidade de caracter que o usuario consegue enviar
 	private String titulo;
 	
-	@NotNull
+	@NotBlank(message = "O atributo texto é obrigatorio!")
 	@Size(min = 10, max = 800)
 	private String texto;
 	
