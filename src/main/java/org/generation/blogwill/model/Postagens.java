@@ -8,8 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.time.LocalDateTime;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
@@ -30,9 +29,8 @@ public class Postagens {
 	@Size(min = 10, max = 800)
 	private String texto;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	//Assim que passar algum dado por essa classe vai capturar extamente a data e a hora.
-	private Date data = new java.sql.Date(System.currentTimeMillis()); //quando passar dado por essa classe vai capturar
+	@UpdateTimestamp
+	public LocalDateTime date;
 	
 	@ManyToOne
 	@JsonIgnoreProperties("postagens")
@@ -76,12 +74,11 @@ public class Postagens {
 		this.texto = texto;
 	}
 
-	public Date getDate() {
-		return data;
+	public LocalDateTime getDate() {
+		return date;
 	}
-
-	public void setDate(Date date) {
-		this.data = date;
+	public void setDate(LocalDateTime date) {
+		this.date = date;
 	}
 	public Tema getTema() {
 		return tema;
